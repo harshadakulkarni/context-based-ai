@@ -1,0 +1,28 @@
+# Shared config for every profile. Which profile is active is itself
+# switchable via env var — defaults to "local" if SPRING_PROFILES_ACTIVE
+# isn't set, so `mvn spring-boot:run` with no extra flags just works locally.
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+app:
+  jwt:
+    expiration-ms: ${JWT_EXPIRATION_MS:604800000} # 7 days
+  usage:
+    free-limit: ${FREE_LIMIT:20}

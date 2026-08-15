@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Context Define — Word Meaning Popup",
+  "version": "2.0.0",
+  "description": "Double or triple click any word on any webpage to see its contextual meaning. Sign in once — no API key required.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "http://localhost:8765/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["http://localhost:5173/*"],
+      "js": ["config.js", "auth-bridge.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Context Define"
+  }
+}

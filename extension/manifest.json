@@ -5,7 +5,8 @@
   "description": "Double or triple click any word on any webpage to see its contextual meaning. Sign in once — no API key required.",
   "permissions": ["storage", "activeTab", "scripting"],
   "host_permissions": [
-    "http://localhost:8765/*"
+    "http://localhost:8765/*",
+    "https://context-define-backend.onrender.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -18,7 +19,7 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["http://localhost:5173/*"],
+      "matches": ["http://localhost:5173/*", "https://context-define-frontend.onrender.com/*"],
       "js": ["config.js", "auth-bridge.js"],
       "run_at": "document_idle"
     }

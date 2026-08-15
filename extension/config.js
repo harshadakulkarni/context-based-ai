@@ -1,4 +1,4 @@
 // Shared config for background.js and popup.js.
-// Swap these two values when you deploy the backend/frontend to production.
-const API_BASE_URL = "http://localhost:8765";
-const DASHBOARD_URL = "http://localhost:5173";
+// Swap these two values back to localhost for local dev testing.
+const API_BASE_URL = "https://context-define-backend.onrender.com";
+const DASHBOARD_URL = "https://context-define-frontend.onrender.com";

@@ -20,7 +20,12 @@ async function request(path, options = {}) {
   const headers = { "Content-Type": "application/json", ...options.headers };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  } catch {
+    throw new Error("Could not reach the server. Check your connection and try again.");
+  }
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {

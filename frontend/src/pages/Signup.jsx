@@ -10,15 +10,28 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  function validate() {
+    if (!email.trim()) return "Enter your email.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Enter a valid email address.";
+    if (!password) return "Enter a password.";
+    if (password.length < 8) return "Password must be at least 8 characters.";
+    return null;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
     setError("");
     setSubmitting(true);
     try {
       await register(email, password);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -26,23 +39,21 @@ export default function Signup() {
 
   return (
     <div className="page-center">
-      <form className="auth-card" onSubmit={handleSubmit}>
+      <form className="auth-card" onSubmit={handleSubmit} noValidate>
         <h1>Create your account</h1>
         <p className="sub">You'll use this same login inside the browser extension.</p>
 
         {error && <div className="auth-error">{error}</div>}
 
         <label htmlFor="email">Email</label>
-        <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
         <label htmlFor="password">Password</label>
         <input
           id="password"
           type="password"
-          minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
         <button className="btn btn-primary" type="submit" disabled={submitting}>

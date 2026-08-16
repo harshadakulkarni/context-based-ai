@@ -161,10 +161,24 @@ testing this end-to-end, but Render's free Postgres instances expire after
 90 days and free web services spin down when idle (a real cold-start delay
 on the first request) — move to a paid plan before pointing real users at it.
 
-## 5. Publish the extension
+## 5. Distributing the extension
 
-This is separate from steps 1–4 and has nothing to do with your hosting
-choice for the backend:
+**For now**, the landing page's "Download extension" button links to
+`frontend/public/context-define-extension.zip` — a pre-built zip of the
+`extension/` folder — and walks the user through loading it manually via
+`chrome://extensions` → Developer mode → Load unpacked. Regenerate that zip
+whenever `extension/` changes (no build step does this automatically):
+
+```powershell
+$temp = "$env:TEMP\context-define-extension"
+Remove-Item -Recurse -Force $temp -ErrorAction SilentlyContinue
+New-Item -ItemType Directory -Path $temp | Out-Null
+Copy-Item -Path "extension\*" -Destination $temp -Recurse
+Compress-Archive -Path $temp -DestinationPath "frontend\public\context-define-extension.zip" -Force
+```
+
+**Once ready for real distribution**, publish to the Chrome Web Store instead
+— users get Chrome's native one-click install instead of a manual zip:
 
 1. Zip the `extension/` folder (with real icons in place and `config.js`
    pointed at production).
@@ -174,9 +188,9 @@ choice for the backend:
 3. Upload the zip, fill in the listing (screenshots, description, privacy
    policy — required since this extension sends page content to your
    backend), and submit for review. Review is typically hours to a few days.
-4. Once published, put the real Chrome Web Store URL into
-   `VITE_CHROME_STORE_URL` on the frontend (used by the landing page's
-   "Add to Chrome" button) and redeploy the frontend.
+4. Once published, swap `Landing.jsx`'s `EXTENSION_ZIP_URL` for the real
+   Chrome Web Store listing URL (and drop the manual-install steps) and
+   redeploy the frontend.
 
 ## What changed vs. the original extension
 

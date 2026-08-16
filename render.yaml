@@ -65,8 +65,6 @@ services:
     envVars:
       - key: VITE_API_BASE_URL
         sync: false # set to the backend service's URL, e.g. https://context-define-backend.onrender.com
-      - key: VITE_CHROME_STORE_URL
-        sync: false # set once the extension is published
     routes:
       - type: rewrite
         source: /*

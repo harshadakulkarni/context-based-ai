@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
-const CHROME_STORE_URL = import.meta.env.VITE_CHROME_STORE_URL || "#";
+// Not yet on the Chrome Web Store, so there's no one-click install prompt —
+// this downloads a zip and the user loads it manually via Developer mode.
+// Swap back to a chromewebstore.google.com URL once published, and this
+// whole download-and-manual-install flow can go away.
+const EXTENSION_ZIP_URL = "/context-define-extension.zip";
 
 export default function Landing() {
   const { user } = useAuth();
@@ -30,9 +34,20 @@ export default function Landing() {
           no bringing your own API key.
         </p>
         <div className="hero-actions">
-          <a className="btn btn-primary" href={CHROME_STORE_URL}>Add to Chrome</a>
+          <a className="btn btn-primary" href={EXTENSION_ZIP_URL} download>Download extension (.zip)</a>
           {!user && <Link className="btn btn-ghost" to="/signup">Create a free account</Link>}
         </div>
+
+        <ol className="install-steps">
+          <li>Unzip the downloaded file.</li>
+          <li>
+            Open <code>chrome://extensions</code> in Chrome and turn on <strong>Developer mode</strong> (top right).
+          </li>
+          <li>
+            Click <strong>Load unpacked</strong> and select the unzipped <code>context-define-extension</code> folder.
+          </li>
+          <li>Sign up or log in above, then double or triple click any word on any page.</li>
+        </ol>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [slow, setSlow] = useState(false);
 
   function validate() {
     if (!email.trim()) return "Enter your email.";
@@ -27,6 +28,8 @@ export default function Login() {
     }
     setError("");
     setSubmitting(true);
+    setSlow(false);
+    const slowTimer = setTimeout(() => setSlow(true), 4000);
     try {
       await login(email, password);
       setSuccess(true);
@@ -34,6 +37,9 @@ export default function Login() {
     } catch (err) {
       setError(err.message || "Something went wrong logging you in. Please try again.");
       setSubmitting(false);
+    } finally {
+      clearTimeout(slowTimer);
+      setSlow(false);
     }
   }
 
@@ -45,6 +51,7 @@ export default function Login() {
 
         {error && <div className="auth-error">{error}</div>}
         {success && <div className="auth-success">Logged in! Taking you to your dashboard…</div>}
+        {slow && <div className="auth-hint">Waking up the server — this can take up to a minute on the first request in a while.</div>}
 
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />

@@ -161,6 +161,12 @@ a {
   margin-bottom: 12px;
 }
 
+.auth-hint {
+  color: #6b7280;
+  font-size: 12.5px;
+  margin-bottom: 12px;
+}
+
 .auth-switch {
   margin-top: 14px;
   font-size: 12.5px;

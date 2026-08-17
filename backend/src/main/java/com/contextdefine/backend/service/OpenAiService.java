@@ -88,6 +88,11 @@ public class OpenAiService {
         if (request.pageUrl() != null && !request.pageUrl().isBlank()) {
             sb.append("Page URL: ").append(request.pageUrl()).append("\n");
         }
+        if (request.language() != null && !request.language().isBlank()
+                && !request.language().equalsIgnoreCase("english")) {
+            sb.append("\nRespond entirely in ").append(request.language())
+                    .append(" (translate the definition itself, not just add a translation alongside it).\n");
+        }
         return sb.toString();
     }
 

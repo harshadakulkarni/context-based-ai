@@ -3,16 +3,21 @@ const loggedInView = document.getElementById("logged-in-view");
 const loginError = document.getElementById("login-error");
 
 async function render() {
-  const { token, email } = await chrome.storage.local.get(["token", "email"]);
+  const { token, email, language } = await chrome.storage.local.get(["token", "email", "language"]);
   if (token) {
     loggedOutView.classList.add("hidden");
     loggedInView.classList.remove("hidden");
     document.getElementById("logged-in-email").textContent = `Logged in as ${email || "your account"}`;
+    document.getElementById("language").value = language || "English";
   } else {
     loggedOutView.classList.remove("hidden");
     loggedInView.classList.add("hidden");
   }
 }
+
+document.getElementById("language").addEventListener("change", (e) => {
+  chrome.storage.local.set({ language: e.target.value });
+});
 
 document.getElementById("login-btn").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();

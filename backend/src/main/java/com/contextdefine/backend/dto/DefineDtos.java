@@ -8,7 +8,8 @@ public class DefineDtos {
             @NotBlank String word,
             String context,
             String pageTitle,
-            String pageUrl
+            String pageUrl,
+            String language
     ) {}
 
     public record DefineResponse(

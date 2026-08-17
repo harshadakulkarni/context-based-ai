@@ -27,13 +27,16 @@
       font-weight: 600;
       margin-bottom: 4px;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 8px 9px;
       font-size: 13px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       margin-bottom: 10px;
+      font-family: inherit;
+      background: #fff;
+      color: #1f2937;
     }
     button {
       width: 100%;
@@ -91,6 +94,23 @@
   <div id="logged-in-view" class="hidden">
     <div class="status" id="logged-in-email"></div>
     <p>Double or triple click any word on a page to see its meaning in context.</p>
+
+    <label for="language">Definition language</label>
+    <select id="language">
+      <option value="English">English</option>
+      <option value="Spanish">Spanish</option>
+      <option value="French">French</option>
+      <option value="German">German</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Korean">Korean</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Russian">Russian</option>
+      <option value="Arabic">Arabic</option>
+      <option value="Italian">Italian</option>
+    </select>
+
     <button id="dashboard-btn" class="secondary">Open dashboard</button>
     <button id="logout-btn" class="secondary">Log out</button>
   </div>

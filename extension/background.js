@@ -10,12 +10,19 @@ async function getToken() {
   return data.token || null;
 }
 
+async function getLanguage() {
+  const data = await chrome.storage.local.get(["language"]);
+  return data.language || "English";
+}
+
 async function fetchDefinition(word, context, pageTitle, pageUrl) {
   const token = await getToken();
 
   if (!token) {
     return { ok: false, error: "not_logged_in" };
   }
+
+  const language = await getLanguage();
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/define`, {
@@ -24,7 +31,7 @@ async function fetchDefinition(word, context, pageTitle, pageUrl) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ word, context, pageTitle, pageUrl })
+      body: JSON.stringify({ word, context, pageTitle, pageUrl, language })
     });
 
     if (response.status === 401) {

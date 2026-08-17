@@ -73,6 +73,31 @@
   color: #fff;
 }
 
+.ctxdef-btn.ctxdef-star svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.ctxdef-btn.ctxdef-star:hover {
+  color: #fbbf24;
+}
+
+.ctxdef-btn.ctxdef-star-saved,
+.ctxdef-btn.ctxdef-star-saved:hover {
+  color: #fbbf24;
+  background: transparent;
+}
+
+.ctxdef-btn.ctxdef-star-saved svg {
+  fill: #fbbf24;
+  stroke: #fbbf24;
+}
+
+.ctxdef-btn:disabled {
+  cursor: default;
+}
+
 .ctxdef-body {
   padding: 14px;
   font-size: 13.5px;

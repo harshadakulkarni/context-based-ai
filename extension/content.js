@@ -5,9 +5,12 @@
 
 (function () {
   const PANEL_ID = "ctxdef-panel-root";
+  const STAR_ICON =
+    '<svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
   let panel = null;
   let isMinimized = false;
   let lastRequest = null; // { word, context } so reload can re-run it
+  let lastResult = null; // { word, context, definition } — what a favorite save sends
   let dragState = null;
 
   function getSelectionWordAndContext() {
@@ -80,6 +83,7 @@
       <div class="ctxdef-header" id="ctxdef-drag-handle">
         <span class="ctxdef-title" id="ctxdef-word-title">Define</span>
         <div class="ctxdef-actions">
+          <button class="ctxdef-btn ctxdef-star" id="ctxdef-save" title="Save to favorites">${STAR_ICON}</button>
           <button class="ctxdef-btn" id="ctxdef-reload" title="Reload">⟳</button>
           <button class="ctxdef-btn" id="ctxdef-minimize" title="Minimize">─</button>
           <button class="ctxdef-btn" id="ctxdef-close" title="Close">✕</button>
@@ -107,6 +111,11 @@
       }
     });
 
+    panel.querySelector("#ctxdef-save").addEventListener("click", () => {
+      if (!lastResult) return;
+      saveFavorite();
+    });
+
     // Dragging via header.
     const handle = panel.querySelector("#ctxdef-drag-handle");
     handle.addEventListener("mousedown", (e) => {
@@ -131,21 +140,70 @@
     return panel;
   }
 
+  function setSaveButtonState(state) {
+    const btn = panel.querySelector("#ctxdef-save");
+    if (!btn) return;
+    btn.classList.remove("ctxdef-star-saved");
+    btn.disabled = false;
+    if (state === "hidden") {
+      btn.style.display = "none";
+    } else if (state === "saved") {
+      btn.style.display = "";
+      btn.classList.add("ctxdef-star-saved");
+      btn.title = "Saved to favorites";
+      btn.disabled = true;
+    } else if (state === "saving") {
+      btn.style.display = "";
+      btn.title = "Saving…";
+      btn.disabled = true;
+    } else {
+      btn.style.display = "";
+      btn.title = "Save to favorites";
+    }
+  }
+
+  function saveFavorite() {
+    setSaveButtonState("saving");
+    chrome.runtime.sendMessage(
+      {
+        type: "SAVE_FAVORITE",
+        word: lastResult.word,
+        context: lastResult.context,
+        definition: lastResult.definition,
+        pageTitle: lastResult.pageTitle,
+        pageUrl: lastResult.pageUrl
+      },
+      (response) => {
+        if (chrome.runtime.lastError || !response || !response.ok) {
+          setSaveButtonState("default");
+          return;
+        }
+        setSaveButtonState("saved");
+      }
+    );
+  }
+
   function setBodyLoading(word) {
     const body = panel.querySelector("#ctxdef-body");
     panel.querySelector("#ctxdef-word-title").textContent = word;
+    setSaveButtonState("hidden");
+    lastResult = null;
     body.innerHTML = `<div class="ctxdef-loading"><span class="ctxdef-spinner"></span> Looking up "${escapeHtml(
       word
     )}"…</div>`;
   }
 
-  function setBodyResult(word, text) {
+  function setBodyResult(word, context, text, pageTitle, pageUrl) {
     const body = panel.querySelector("#ctxdef-body");
     panel.querySelector("#ctxdef-word-title").textContent = word;
+    lastResult = { word, context, definition: text, pageTitle, pageUrl };
+    setSaveButtonState("default");
     body.innerHTML = `<div class="ctxdef-definition">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
   }
 
   function setBodyError(message, actionLabel) {
+    setSaveButtonState("hidden");
+    lastResult = null;
     const body = panel.querySelector("#ctxdef-body");
     body.innerHTML = `
       <div class="ctxdef-error">${escapeHtml(message)}</div>
@@ -208,7 +266,7 @@
           }
           return;
         }
-        setBodyResult(word, response.definition);
+        setBodyResult(word, context, response.definition, document.title, location.href);
       }
     );
   }
@@ -221,7 +279,8 @@
     // Allow the browser a tick to finalize the selection.
     setTimeout(() => {
       const result = getSelectionWordAndContext();
-      if (!result || !result.word || result.word.length > 120) return;
+      // Generous enough for a full sentence (triple-click), not just a single word.
+      if (!result || !result.word || result.word.length > 600) return;
       runDefinitionRequest(result.word, result.context);
     }, 10);
   });

@@ -4,6 +4,7 @@ import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Favorites from "./pages/Favorites.jsx";
 
 function RequireAuth({ children }) {
   const { user, loading } = useAuth();
@@ -23,6 +24,14 @@ export default function App() {
         element={
           <RequireAuth>
             <Dashboard />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/favorites"
+        element={
+          <RequireAuth>
+            <Favorites />
           </RequireAuth>
         }
       />

@@ -55,5 +55,7 @@ export const api = {
   me: () => request("/api/auth/me"),
   usage: () => request("/api/usage"),
   createSubscription: () => request("/api/billing/checkout", { method: "POST" }),
-  cancelSubscription: () => request("/api/billing/cancel", { method: "POST" })
+  cancelSubscription: () => request("/api/billing/cancel", { method: "POST" }),
+  getFavorites: () => request("/api/favorites"),
+  deleteFavorite: (id) => request(`/api/favorites/${id}`, { method: "DELETE" })
 };

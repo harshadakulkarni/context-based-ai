@@ -87,6 +87,7 @@ export default function Dashboard() {
       <nav className="nav">
         <Link to="/" className="nav-brand">Context Define</Link>
         <div className="nav-links">
+          <Link to="/favorites" className="btn btn-ghost">Favorites</Link>
           <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>
         </div>
       </nav>

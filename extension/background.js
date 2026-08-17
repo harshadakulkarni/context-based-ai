@@ -55,9 +55,45 @@ async function fetchDefinition(word, context, pageTitle, pageUrl) {
   }
 }
 
+async function saveFavorite(word, context, definition, pageTitle, pageUrl) {
+  const token = await getToken();
+  if (!token) {
+    return { ok: false, error: "not_logged_in" };
+  }
+
+  const language = await getLanguage();
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/favorites`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ term: word, context, definition, language, pageTitle, pageUrl })
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      return { ok: false, error: "api_error", message: body.message || `Server error (${response.status})` };
+    }
+
+    return { ok: true, favorite: await response.json() };
+  } catch (err) {
+    return { ok: false, error: "network_error", message: String(err) };
+  }
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message && message.type === "DEFINE_WORD") {
     fetchDefinition(message.word, message.context, message.pageTitle, message.pageUrl).then(sendResponse);
+    return true; // keep the message channel open for async sendResponse
+  }
+
+  if (message && message.type === "SAVE_FAVORITE") {
+    saveFavorite(message.word, message.context, message.definition, message.pageTitle, message.pageUrl).then(
+      sendResponse
+    );
     return true; // keep the message channel open for async sendResponse
   }
 

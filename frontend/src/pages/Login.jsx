@@ -8,6 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   function validate() {
@@ -21,16 +22,17 @@ export default function Login() {
     const validationError = validate();
     if (validationError) {
       setError(validationError);
+      setSuccess(false);
       return;
     }
     setError("");
     setSubmitting(true);
     try {
       await login(email, password);
-      navigate("/dashboard");
+      setSuccess(true);
+      setTimeout(() => navigate("/dashboard"), 700);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
+      setError(err.message || "Something went wrong logging you in. Please try again.");
       setSubmitting(false);
     }
   }
@@ -42,6 +44,7 @@ export default function Login() {
         <p className="sub">Use the same account in the browser extension and here.</p>
 
         {error && <div className="auth-error">{error}</div>}
+        {success && <div className="auth-success">Logged in! Taking you to your dashboard…</div>}
 
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -50,7 +53,7 @@ export default function Login() {
         <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
         <button className="btn btn-primary" type="submit" disabled={submitting}>
-          {submitting ? "Logging in…" : "Log in"}
+          {success ? "Logged in" : submitting ? "Logging in…" : "Log in"}
         </button>
 
         <div className="auth-switch">

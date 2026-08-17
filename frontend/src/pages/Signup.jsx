@@ -8,6 +8,7 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   function validate() {
@@ -23,16 +24,17 @@ export default function Signup() {
     const validationError = validate();
     if (validationError) {
       setError(validationError);
+      setSuccess(false);
       return;
     }
     setError("");
     setSubmitting(true);
     try {
       await register(email, password);
-      navigate("/dashboard");
+      setSuccess(true);
+      setTimeout(() => navigate("/dashboard"), 700);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
+      setError(err.message || "Something went wrong creating your account. Please try again.");
       setSubmitting(false);
     }
   }
@@ -44,6 +46,7 @@ export default function Signup() {
         <p className="sub">You'll use this same login inside the browser extension.</p>
 
         {error && <div className="auth-error">{error}</div>}
+        {success && <div className="auth-success">Account created! Taking you to your dashboard…</div>}
 
         <label htmlFor="email">Email</label>
         <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -57,7 +60,7 @@ export default function Signup() {
         />
 
         <button className="btn btn-primary" type="submit" disabled={submitting}>
-          {submitting ? "Creating account…" : "Sign up"}
+          {success ? "Account created" : submitting ? "Creating account…" : "Sign up"}
         </button>
 
         <div className="auth-switch">

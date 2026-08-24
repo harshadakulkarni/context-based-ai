@@ -164,17 +164,37 @@ on the first request) — move to a paid plan before pointing real users at it.
 ## 5. Distributing the extension
 
 **For now**, the landing page's "Download extension" button links to
-`frontend/public/context-define-extension.zip` — a pre-built zip of the
-`extension/` folder — and walks the user through loading it manually via
-`chrome://extensions` → Developer mode → Load unpacked. Regenerate that zip
-whenever `extension/` changes (no build step does this automatically):
+`frontend/public/context-define-extension.zip` — a pre-built zip — and walks
+the user through loading it manually via `chrome://extensions` → Developer
+mode → Load unpacked.
+
+The zip ships **obfuscated** JS, not the raw source in `extension/` — anyone
+downloading and unzipping it gets scrambled, hard-to-read code instead of the
+plain files. `extension/build.js` (run via `npm run build` inside `extension/`,
+after `npm install` there once) runs each `.js` file through
+`javascript-obfuscator` and writes the result to `extension/dist/`, alongside
+unchanged copies of `manifest.json`/`popup.html`/`content.css`/`icons/`. It
+does **not** rename top-level (global) identifiers — `config.js`'s
+`API_BASE_URL`/`DASHBOARD_URL` are referenced by that literal name from
+`background.js`, `popup.js`, and `auth-bridge.js` across separate script tags,
+and renaming globals would silently break that sharing since each file is
+obfuscated independently. This isn't real security — no browser extension on
+any platform can hide its JS from a determined reader, since the browser
+itself has to execute it — it just stops casual copy-pasting.
+
+Regenerate the distributable zip whenever `extension/` changes:
 
 ```powershell
+cd extension
+npm install   # first time only
+npm run build
+
 $temp = "$env:TEMP\context-define-extension"
 Remove-Item -Recurse -Force $temp -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path $temp | Out-Null
-Copy-Item -Path "extension\*" -Destination $temp -Recurse
-Compress-Archive -Path $temp -DestinationPath "frontend\public\context-define-extension.zip" -Force
+Copy-Item -Path "dist\*" -Destination $temp -Recurse
+Compress-Archive -Path $temp -DestinationPath "..\frontend\public\context-define-extension.zip" -Force
+cd ..
 ```
 
 **Once ready for real distribution**, publish to the Chrome Web Store instead

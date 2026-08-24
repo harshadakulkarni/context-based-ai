@@ -6,6 +6,8 @@ backend/target/
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+extension/node_modules/
+extension/dist/
 
 # IDE
 .idea/

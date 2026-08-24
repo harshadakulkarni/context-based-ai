@@ -1,0 +1,12 @@
+{
+  "name": "context-define-extension-build",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build step that obfuscates the extension's JS before packaging it for distribution.",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "javascript-obfuscator": "^4.1.1"
+  }
+}

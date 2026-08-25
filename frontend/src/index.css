@@ -30,10 +30,19 @@ a {
 }
 
 .nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 700;
   font-size: 16px;
   text-decoration: none;
   color: #1f2937;
+}
+
+.nav-logo {
+  height: 26px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {

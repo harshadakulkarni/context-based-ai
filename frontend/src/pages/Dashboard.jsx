@@ -85,7 +85,10 @@ export default function Dashboard() {
   return (
     <div>
       <nav className="nav">
-        <Link to="/" className="nav-brand">SensusGrow</Link>
+        <Link to="/" className="nav-brand">
+          <img src="/logo-icon.png" alt="" className="nav-logo" />
+          SensusGrow
+        </Link>
         <div className="nav-links">
           <Link to="/favorites" className="btn btn-ghost">Favorites</Link>
           <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>

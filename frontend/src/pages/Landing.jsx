@@ -13,7 +13,10 @@ export default function Landing() {
   return (
     <div>
       <nav className="nav">
-        <Link to="/" className="nav-brand">SensusGrow</Link>
+        <Link to="/" className="nav-brand">
+          <img src="/logo-icon.png" alt="" className="nav-logo" />
+          SensusGrow
+        </Link>
         <div className="nav-links">
           {user ? (
             <Link to="/dashboard" className="btn btn-primary">Dashboard</Link>

@@ -7,41 +7,82 @@ import { useAuth } from "../context/AuthContext.jsx";
 // whole download-and-manual-install flow can go away.
 const EXTENSION_ZIP_URL = "/context-define-extension.zip";
 
+const VISION_ITEMS = [
+  {
+    title: "PDF & eBook support",
+    body: "Get definitions inside PDFs and eBooks, not just web pages.",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6" />
+      </svg>
+    )
+  },
+  {
+    title: "Works inside AI chats",
+    body: "Look up a word inside ChatGPT and other AI platforms, the same way you do on any article.",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+      </svg>
+    )
+  },
+  {
+    title: "One-click install",
+    body: "A real Chrome Web Store listing — no more manual zip downloads and Developer mode.",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="3.2" />
+      </svg>
+    )
+  }
+];
+
 export default function Landing() {
   const { user } = useAuth();
 
   return (
-    <div>
-      <nav className="nav">
-        <Link to="/" className="nav-brand">
-          <img src="/logo-icon.png" alt="" className="nav-logo" />
-          SensusGrow
+    <div className="landing">
+      <nav className="landing-nav">
+        <Link to="/" className="landing-brand">
+          <img src="/logo-icon.png" alt="" className="landing-brand-icon" />
+          Sensus<span className="accent">Grow</span>
         </Link>
-        <div className="nav-links">
+        <div className="landing-nav-links">
           {user ? (
-            <Link to="/dashboard" className="btn btn-primary">Dashboard</Link>
+            <Link to="/dashboard" className="landing-btn landing-btn-primary">Dashboard</Link>
           ) : (
             <>
-              <Link to="/login" className="btn btn-ghost">Log in</Link>
-              <Link to="/signup" className="btn btn-primary">Sign up</Link>
+              <Link to="/login" className="landing-btn landing-btn-ghost">Log in</Link>
+              <Link to="/signup" className="landing-btn landing-btn-primary">Sign up</Link>
             </>
           )}
         </div>
       </nav>
 
-      <div className="hero">
-        <h1>Understand any word, in context, without leaving the page.</h1>
-        <p>
+      <div className="landing-hero">
+        <p className="landing-eyebrow">Contextual intelligence for your research flow</p>
+        <h1>
+          Understand any word, <span className="accent">without leaving the page.</span>
+        </h1>
+        <p className="landing-sub">
           Double or triple click any word on any webpage to get a plain-English
           definition fitted to the sentence it appears in. No dictionary tab-switching,
           no bringing your own API key.
         </p>
-        <div className="hero-actions">
-          <a className="btn btn-primary" href={EXTENSION_ZIP_URL} download>Download extension (.zip)</a>
-          {!user && <Link className="btn btn-ghost" to="/signup">Create a free account</Link>}
+        <div className="landing-actions">
+          <a className="landing-btn landing-btn-primary landing-btn-lg" href={EXTENSION_ZIP_URL} download>
+            Download extension (.zip)
+          </a>
+          {!user && (
+            <Link className="landing-btn landing-btn-ghost landing-btn-lg" to="/signup">
+              Create a free account
+            </Link>
+          )}
         </div>
 
-        <ol className="install-steps">
+        <ol className="landing-steps">
           <li>Unzip the downloaded file.</li>
           <li>
             Open <code>chrome://extensions</code> in Chrome and turn on <strong>Developer mode</strong> (top right).
@@ -53,16 +94,23 @@ export default function Landing() {
         </ol>
       </div>
 
-      <div className="vision">
-        <h2>Where we're headed</h2>
-        <p className="vision-note">
-          What's live today: double/triple-click definitions on any webpage, saved favorites,
-          multiple definition languages, and Pro subscriptions. The graphic below is our product
-          vision, not a feature list of what's shipped — PDF/eBook support, direct ChatGPT/AI-platform
-          integration, and a Chrome Web Store listing (installs are a manual zip download for now)
-          are on the roadmap, not available yet.
+      <div className="landing-vision">
+        <p className="landing-eyebrow">Where we're headed</p>
+        <h2>Beyond the dictionary lookup</h2>
+        <p className="landing-vision-note">
+          What's live today: double/triple-click definitions on any webpage, saved favorites with
+          the source they came from, multiple definition languages, and Pro subscriptions. What
+          follows is our roadmap, not a list of what's already shipped.
         </p>
-        <img src="/vision-banner.webp" alt="SensusGrow product vision overview" className="vision-banner" />
+        <div className="landing-vision-grid">
+          {VISION_ITEMS.map((item) => (
+            <div className="vision-card" key={item.title}>
+              <div className="vision-card-icon">{item.icon}</div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

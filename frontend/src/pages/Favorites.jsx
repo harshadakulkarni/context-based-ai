@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { api } from "../api/client";
+import ThemeToggle from "../components/ThemeToggle.jsx";
 
 function hostnameOf(url) {
   try {
@@ -88,6 +89,7 @@ export default function Favorites() {
           SensusGrow
         </Link>
         <div className="nav-links">
+          <ThemeToggle />
           <Link to="/dashboard" className="btn btn-ghost">Dashboard</Link>
           <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>
         </div>

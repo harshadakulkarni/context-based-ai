@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import ThemeToggle from "../components/ThemeToggle.jsx";
 
 export default function Signup() {
   const { register } = useAuth();
@@ -46,34 +47,50 @@ export default function Signup() {
   }
 
   return (
-    <div className="page-center">
-      <form className="auth-card" onSubmit={handleSubmit} noValidate>
-        <h1>Create your account</h1>
-        <p className="sub">You'll use this same login inside the browser extension.</p>
-
-        {error && <div className="auth-error">{error}</div>}
-        {success && <div className="auth-success">Account created! Taking you to your dashboard…</div>}
-        {slow && <div className="auth-hint">Waking up the server — this can take up to a minute on the first request in a while.</div>}
-
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button className="btn btn-primary" type="submit" disabled={submitting}>
-          {success ? "Account created" : submitting ? "Creating account…" : "Sign up"}
-        </button>
-
-        <div className="auth-switch">
-          Already have an account? <Link to="/login">Log in</Link>
+    <div>
+      <nav className="nav">
+        <Link to="/" className="nav-brand">
+          <img src="/logo-icon.png" alt="" className="nav-logo" />
+          Sensus<span className="accent">Grow</span>
+        </Link>
+        <div className="nav-links">
+          <ThemeToggle />
         </div>
-      </form>
+      </nav>
+
+      <div className="page-center" style={{ minHeight: "calc(100vh - 69px)" }}>
+        <form className="auth-card" onSubmit={handleSubmit} noValidate>
+          <h1>Create your account</h1>
+          <p className="sub">You'll use this same login inside the browser extension.</p>
+
+          {error && <div className="auth-error">{error}</div>}
+          {success && <div className="auth-success">Account created! Taking you to your dashboard…</div>}
+          {slow && (
+            <div className="auth-hint">
+              Waking up the server — this can take up to a minute on the first request in a while.
+            </div>
+          )}
+
+          <label htmlFor="email">Email</label>
+          <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button className="btn btn-primary" type="submit" disabled={submitting}>
+            {success ? "Account created" : submitting ? "Creating account…" : "Sign up"}
+          </button>
+
+          <div className="auth-switch">
+            Already have an account? <Link to="/login">Log in</Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

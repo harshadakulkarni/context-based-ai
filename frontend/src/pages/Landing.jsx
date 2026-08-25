@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import ThemeToggle from "../components/ThemeToggle.jsx";
 
 // Not yet on the Chrome Web Store, so there's no one-click install prompt —
 // this downloads a zip and the user loads it manually via Developer mode.
@@ -43,46 +44,47 @@ export default function Landing() {
   const { user } = useAuth();
 
   return (
-    <div className="landing">
-      <nav className="landing-nav">
-        <Link to="/" className="landing-brand">
-          <img src="/logo-icon.png" alt="" className="landing-brand-icon" />
+    <div>
+      <nav className="nav">
+        <Link to="/" className="nav-brand">
+          <img src="/logo-icon.png" alt="" className="nav-logo" />
           Sensus<span className="accent">Grow</span>
         </Link>
-        <div className="landing-nav-links">
+        <div className="nav-links">
+          <ThemeToggle />
           {user ? (
-            <Link to="/dashboard" className="landing-btn landing-btn-primary">Dashboard</Link>
+            <Link to="/dashboard" className="btn btn-primary">Dashboard</Link>
           ) : (
             <>
-              <Link to="/login" className="landing-btn landing-btn-ghost">Log in</Link>
-              <Link to="/signup" className="landing-btn landing-btn-primary">Sign up</Link>
+              <Link to="/login" className="btn btn-ghost">Log in</Link>
+              <Link to="/signup" className="btn btn-primary">Sign up</Link>
             </>
           )}
         </div>
       </nav>
 
-      <div className="landing-hero">
-        <p className="landing-eyebrow">Contextual intelligence for your research flow</p>
+      <div className="hero">
+        <p className="eyebrow">Contextual intelligence for your research flow</p>
         <h1>
           Understand any word, <span className="accent">without leaving the page.</span>
         </h1>
-        <p className="landing-sub">
+        <p className="sub">
           Double or triple click any word on any webpage to get a plain-English
           definition fitted to the sentence it appears in. No dictionary tab-switching,
           no bringing your own API key.
         </p>
-        <div className="landing-actions">
-          <a className="landing-btn landing-btn-primary landing-btn-lg" href={EXTENSION_ZIP_URL} download>
+        <div className="hero-actions">
+          <a className="btn btn-primary btn-lg" href={EXTENSION_ZIP_URL} download>
             Download extension (.zip)
           </a>
           {!user && (
-            <Link className="landing-btn landing-btn-ghost landing-btn-lg" to="/signup">
+            <Link className="btn btn-ghost btn-lg" to="/signup">
               Create a free account
             </Link>
           )}
         </div>
 
-        <ol className="landing-steps">
+        <ol className="install-steps">
           <li>Unzip the downloaded file.</li>
           <li>
             Open <code>chrome://extensions</code> in Chrome and turn on <strong>Developer mode</strong> (top right).
@@ -94,15 +96,15 @@ export default function Landing() {
         </ol>
       </div>
 
-      <div className="landing-vision">
-        <p className="landing-eyebrow">Where we're headed</p>
+      <div className="vision">
+        <p className="eyebrow">Where we're headed</p>
         <h2>Beyond the dictionary lookup</h2>
-        <p className="landing-vision-note">
+        <p className="vision-note">
           What's live today: double/triple-click definitions on any webpage, saved favorites with
           the source they came from, multiple definition languages, and Pro subscriptions. What
           follows is our roadmap, not a list of what's already shipped.
         </p>
-        <div className="landing-vision-grid">
+        <div className="vision-grid">
           {VISION_ITEMS.map((item) => (
             <div className="vision-card" key={item.title}>
               <div className="vision-card-icon">{item.icon}</div>

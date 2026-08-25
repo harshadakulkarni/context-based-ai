@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { api } from "../api/client";
+import ThemeToggle from "../components/ThemeToggle.jsx";
 
 export default function Dashboard() {
   const { user, logout, refresh } = useAuth();
@@ -90,6 +91,7 @@ export default function Dashboard() {
           SensusGrow
         </Link>
         <div className="nav-links">
+          <ThemeToggle />
           <Link to="/favorites" className="btn btn-ghost">Favorites</Link>
           <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>
         </div>

@@ -83,7 +83,7 @@ export default function Favorites() {
   return (
     <div>
       <nav className="nav">
-        <Link to="/" className="nav-brand">Context Define</Link>
+        <Link to="/" className="nav-brand">SensusGrow</Link>
         <div className="nav-links">
           <Link to="/dashboard" className="btn btn-ghost">Dashboard</Link>
           <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>

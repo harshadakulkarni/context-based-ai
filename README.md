@@ -1,4 +1,4 @@
-# Context Define — SaaS conversion
+# SensusGrow — SaaS conversion
 
 Turns the standalone "bring your own OpenAI key" Chrome extension into a
 SaaS: your backend holds the OpenAI key, users sign up/log in, and usage is

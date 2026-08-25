@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Context Define — Word Meaning Popup",
+  "name": "SensusGrow — Word Meaning Popup",
   "version": "2.0.0",
   "description": "Double or triple click any word on any webpage to see its contextual meaning. Sign in once — no API key required.",
   "permissions": ["storage", "activeTab", "scripting"],
@@ -26,6 +26,6 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Context Define"
+    "default_title": "SensusGrow"
   }
 }

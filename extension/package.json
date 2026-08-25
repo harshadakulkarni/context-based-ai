@@ -1,5 +1,5 @@
 {
-  "name": "context-define-extension-build",
+  "name": "sensusgrow-extension-build",
   "private": true,
   "version": "1.0.0",
   "description": "Build step that obfuscates the extension's JS before packaging it for distribution.",

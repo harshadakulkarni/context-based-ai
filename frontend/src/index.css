@@ -119,6 +119,34 @@ a {
   font-size: 13px;
 }
 
+.vision {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 100px;
+  text-align: center;
+}
+
+.vision h2 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+.vision-note {
+  font-size: 13.5px;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0 auto 28px;
+}
+
+.vision-banner {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
 .auth-card {
   width: 340px;
   background: #fff;

@@ -52,6 +52,18 @@ export default function Landing() {
           <li>Sign up or log in above, then double or triple click any word on any page.</li>
         </ol>
       </div>
+
+      <div className="vision">
+        <h2>Where we're headed</h2>
+        <p className="vision-note">
+          What's live today: double/triple-click definitions on any webpage, saved favorites,
+          multiple definition languages, and Pro subscriptions. The graphic below is our product
+          vision, not a feature list of what's shipped — PDF/eBook support, direct ChatGPT/AI-platform
+          integration, and a Chrome Web Store listing (installs are a manual zip download for now)
+          are on the roadmap, not available yet.
+        </p>
+        <img src="/vision-banner.webp" alt="SensusGrow product vision overview" className="vision-banner" />
+      </div>
     </div>
   );
 }

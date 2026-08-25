@@ -212,6 +212,31 @@ cd ..
    Chrome Web Store listing URL (and drop the manual-install steps) and
    redeploy the frontend.
 
+## 6. PDF support
+
+Chrome blocks every extension — ours included, no exceptions — from injecting
+scripts into its own built-in PDF viewer. That's a deliberate platform
+restriction (it's how Chrome stops malicious extensions from tampering with
+PDFs you view), not a bug on our end, so there's no way to make lookups work
+automatically on a PDF opened the normal way.
+
+The workaround: `extension/pdf-viewer.html` + `pdf-viewer.js` is our own
+bundled viewer built on [pdf.js](https://mozilla.github.io/pdf.js/)
+(vendored, unmodified, in `extension/pdfjs/`). The popup's **"Open a PDF…"**
+button opens a local file through it instead of Chrome's default viewer;
+`content.js` — the same script that powers lookups on regular webpages —
+runs unmodified on that page too, since it's just another extension-owned
+page. Only local files are supported (a `<input type="file">` picker); it
+doesn't intercept `.pdf` links elsewhere on the web or fetch remote URLs.
+
+One easy-to-miss detail if you touch this code: `TextLayer` (pdf.js's
+selectable-text overlay) sizes itself via CSS `round()`/`calc()` against
+`--total-scale-factor`/`--scale-round-x`/`--scale-round-y` custom properties
+that pdf.js expects the embedder to set — it doesn't default them. Miss that
+and the text layer silently collapses to zero size: the page still renders
+fine, but nothing is selectable and lookups just don't fire, with no error
+anywhere to point at why.
+
 ## What changed vs. the original extension
 
 - **`options.html`/`options.js` (API key + model picker) were removed.**

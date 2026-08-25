@@ -10,16 +10,6 @@ const EXTENSION_ZIP_URL = "/context-define-extension.zip";
 
 const VISION_ITEMS = [
   {
-    title: "PDF & eBook support",
-    body: "Get definitions inside PDFs and eBooks, not just web pages.",
-    icon: (
-      <svg viewBox="0 0 24 24">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <path d="M14 2v6h6" />
-      </svg>
-    )
-  },
-  {
     title: "Works inside AI chats",
     body: "Look up a word inside ChatGPT and other AI platforms, the same way you do on any article.",
     icon: (
@@ -93,6 +83,11 @@ export default function Landing() {
             Click <strong>Load unpacked</strong> and select the unzipped <code>context-define-extension</code> folder.
           </li>
           <li>Sign up or log in above, then double or triple click any word on any page.</li>
+          <li>
+            For PDFs: Chrome blocks every extension, ours included, from reading its own built-in PDF
+            viewer — so use <strong>"Open a PDF…"</strong> in the extension popup instead, which opens the
+            file in our own viewer where lookups work the same way.
+          </li>
         </ol>
       </div>
 
@@ -100,9 +95,10 @@ export default function Landing() {
         <p className="eyebrow">Where we're headed</p>
         <h2>Beyond the dictionary lookup</h2>
         <p className="vision-note">
-          What's live today: double/triple-click definitions on any webpage, saved favorites with
-          the source they came from, multiple definition languages, and Pro subscriptions. What
-          follows is our roadmap, not a list of what's already shipped.
+          What's live today: double/triple-click definitions on any webpage, PDF support via the
+          extension's own viewer, saved favorites with the source they came from, multiple
+          definition languages, and Pro subscriptions. What follows is our roadmap, not a list of
+          what's already shipped.
         </p>
         <div className="vision-grid">
           {VISION_ITEMS.map((item) => (

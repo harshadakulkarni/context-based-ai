@@ -15,8 +15,11 @@ const JavaScriptObfuscator = require("javascript-obfuscator");
 const SRC_DIR = __dirname;
 const OUT_DIR = path.join(__dirname, "dist");
 
-const JS_FILES = ["config.js", "background.js", "content.js", "popup.js", "auth-bridge.js"];
-const STATIC_ENTRIES = ["manifest.json", "popup.html", "content.css", "icons"];
+const JS_FILES = ["config.js", "background.js", "content.js", "popup.js", "auth-bridge.js", "pdf-viewer.js"];
+// pdfjs/ is the vendored pdf.js library, copied unobfuscated — it's a large
+// well-known open-source dependency, not our own code, and running it through
+// the obfuscator would balloon build time for zero benefit.
+const STATIC_ENTRIES = ["manifest.json", "popup.html", "content.css", "icons", "pdf-viewer.html", "pdfjs"];
 
 const OBFUSCATOR_OPTIONS = {
   compact: true,

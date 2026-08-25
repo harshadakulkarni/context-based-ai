@@ -61,6 +61,10 @@ document.getElementById("dashboard-btn").addEventListener("click", () => {
   chrome.tabs.create({ url: `${DASHBOARD_URL}/dashboard` });
 });
 
+document.getElementById("open-pdf-btn").addEventListener("click", () => {
+  chrome.tabs.create({ url: chrome.runtime.getURL("pdf-viewer.html") });
+});
+
 document.getElementById("logout-btn").addEventListener("click", async () => {
   await chrome.storage.local.remove(["token", "email"]);
   render();

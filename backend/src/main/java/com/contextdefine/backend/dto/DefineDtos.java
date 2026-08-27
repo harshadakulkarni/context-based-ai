@@ -9,7 +9,8 @@ public class DefineDtos {
             String context,
             String pageTitle,
             String pageUrl,
-            String language
+            String language,
+            Boolean detailed
     ) {}
 
     public record DefineResponse(

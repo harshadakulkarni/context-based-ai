@@ -16,6 +16,10 @@ public class AuthDtos {
             @NotBlank String password
     ) {}
 
+    public record GoogleAuthRequest(
+            @NotBlank String credential
+    ) {}
+
     public record AuthResponse(
             String token,
             String email

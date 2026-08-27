@@ -35,3 +35,7 @@ app:
     key-secret: ${RAZORPAY_KEY_SECRET:}
     webhook-secret: ${RAZORPAY_WEBHOOK_SECRET:}
     plan-id: ${RAZORPAY_PLAN_ID:}
+  google:
+    # Empty by default so a fresh checkout still boots — /api/auth/google
+    # returns a clear "server_misconfigured" error until this is set.
+    client-id: ${GOOGLE_CLIENT_ID:}

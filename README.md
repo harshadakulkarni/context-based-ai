@@ -25,6 +25,11 @@ extension/  The Chrome extension, rewired to call backend/ instead of OpenAI
    returns the definition.
 5. The dashboard (frontend) shows the same account's usage via
    `GET /api/usage`.
+6. Every definition panel has a **"More detail"** button — sends the same
+   word/context again with `detailed: true`, which swaps in a longer system
+   prompt (etymology, other senses, synonyms, a second example) and a higher
+   `max_tokens` on the backend. Counts as a normal `/api/define` call against
+   the user's usage limit, same as the initial lookup.
 
 The user's OpenAI key is never in the browser anymore — only your server has it.
 
@@ -253,6 +258,41 @@ anywhere to point at why.
 - **`manifest.json`** dropped the broad `<all_urls>` and
   `api.openai.com` host permissions in favor of just your backend's origin —
   smaller attack surface, since the browser no longer talks to OpenAI at all.
+
+## Google sign-in
+
+Optional — `POST /api/auth/google` accepts a Google ID token (from the
+frontend's "Continue with Google" button, via
+[Google Identity Services](https://developers.google.com/identity/gsi/web)),
+verifies it server-side with `GoogleIdTokenVerifier`, and finds-or-creates the
+matching account. Accounts created this way get a random, never-shown
+password hash (there's no separate nullable-password schema branch — it just
+reuses the same `passwordHash` column every other account has).
+
+Both sides are optional independently — with no client ID configured, the
+frontend simply doesn't render the button (`GoogleSignInButton` returns
+`null`), and the backend endpoint returns a clear `server_misconfigured`
+error rather than crashing on missing config, same pattern as the OpenAI key.
+
+Only implemented on the **website**, not the extension popup directly — the
+extension already picks up a website login automatically via
+`auth-bridge.js` (see "What changed" below), so a website Google sign-in
+carries into the extension for free without needing the separate
+`chrome.identity` OAuth flow extensions normally require.
+
+Setup, one-time in [Google Cloud Console](https://console.cloud.google.com):
+1. Create/select a project → **APIs & Services → OAuth consent screen** →
+   fill in the basics (app name, support email).
+2. **APIs & Services → Credentials → Create Credentials → OAuth client ID** →
+   type **Web application**.
+3. Under **Authorized JavaScript origins**, add both
+   `http://localhost:5173` (local dev) and your real frontend URL (e.g.
+   `https://context-define-frontend.onrender.com`). No redirect URI needed —
+   the ID-token flow this uses doesn't redirect.
+4. Copy the **Client ID** it generates, and set it as `GOOGLE_CLIENT_ID` on
+   the backend and `VITE_GOOGLE_CLIENT_ID` on the frontend (same value, both
+   places — the frontend needs it to render the button, the backend needs it
+   to check the token's audience matches).
 
 ## Billing (Razorpay)
 

@@ -24,6 +24,22 @@ public class OpenAiService {
             "Do not repeat the whole sentence back. Do not add greetings or sign-offs. " +
             "If the word is a common, simple word (e.g. 'the', 'and', 'is'), still give a brief honest answer.";
 
+    // Used when the user asks for "more detail" on a definition they've already seen —
+    // same word/context, but a longer, richer answer instead of the compact default.
+    private static final String DETAILED_SYSTEM_PROMPT =
+            "You are a knowledgeable dictionary and language assistant embedded in a browser extension. " +
+            "The user has already seen a brief definition of a word/phrase as used in a specific sentence, " +
+            "and now wants more depth on it. Given the word/phrase and the sentence it appears in, provide a " +
+            "richer explanation covering, where genuinely relevant: " +
+            "1) A fuller definition of this specific contextual sense. " +
+            "2) Word origin/etymology, briefly. " +
+            "3) One or two other common senses of the word, if it's polysemous, clearly distinguished from the " +
+            "sense used here. " +
+            "4) A short list of synonyms or closely related words. " +
+            "5) A second example sentence using the word in a similar sense. " +
+            "Format in plain text with clear line breaks between parts — do not use markdown symbols like ** or #. " +
+            "Do not repeat the original sentence verbatim as your example. Do not add greetings or sign-offs.";
+
     private final RestClient restClient;
     private final String apiKey;
     private final String model;
@@ -44,16 +60,17 @@ public class OpenAiService {
             return DefineResponse.failure("server_misconfigured", "Server is not configured with an OpenAI API key");
         }
 
+        boolean detailed = Boolean.TRUE.equals(request.detailed());
         String userPrompt = buildUserPrompt(request);
 
         Map<String, Object> body = Map.of(
                 "model", model,
                 "messages", List.of(
-                        Map.of("role", "system", "content", SYSTEM_PROMPT),
+                        Map.of("role", "system", "content", detailed ? DETAILED_SYSTEM_PROMPT : SYSTEM_PROMPT),
                         Map.of("role", "user", "content", userPrompt)
                 ),
                 "temperature", 0.3,
-                "max_tokens", 220
+                "max_tokens", detailed ? 550 : 220
         );
 
         try {

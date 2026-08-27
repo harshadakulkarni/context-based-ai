@@ -158,3 +158,29 @@
 .ctxdef-settings-btn:hover {
   background: #4f46e5;
 }
+
+.ctxdef-detail-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+  color: #6366f1;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.ctxdef-detail-btn:hover {
+  text-decoration: underline;
+}
+
+.ctxdef-detail-btn:disabled {
+  cursor: default;
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.ctxdef-detail-text {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+}

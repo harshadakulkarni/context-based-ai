@@ -21,3 +21,10 @@ app:
     key-secret: ${RAZORPAY_KEY_SECRET}
     webhook-secret: ${RAZORPAY_WEBHOOK_SECRET}
     plan-id: ${RAZORPAY_PLAN_ID}
+  google:
+    # Optional even in prod, unlike the vars above — this is a live site
+    # already, and a required-with-no-fallback var here would crash the
+    # whole backend on the next deploy if it isn't set yet (same failure
+    # mode Razorpay hit while it was still being configured). Missing just
+    # makes /api/auth/google return a clear "server_misconfigured" error.
+    client-id: ${GOOGLE_CLIENT_ID:}

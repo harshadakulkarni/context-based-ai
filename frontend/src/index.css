@@ -420,6 +420,29 @@ code {
   color: var(--muted);
 }
 
+.auth-google {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: var(--muted-2);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 .dashboard {
   max-width: 720px;
   margin: 0 auto;

@@ -55,6 +55,8 @@ services:
         sync: false
       - key: RAZORPAY_PLAN_ID
         sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false # optional — /api/auth/google returns server_misconfigured until set
 
   - type: web
     name: context-define-frontend
@@ -65,6 +67,8 @@ services:
     envVars:
       - key: VITE_API_BASE_URL
         sync: false # set to the backend service's URL, e.g. https://context-define-backend.onrender.com
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false # optional — leave unset to hide the "Continue with Google" button
     routes:
       - type: rewrite
         source: /*

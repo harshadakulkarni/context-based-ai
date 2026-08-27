@@ -52,6 +52,8 @@ export const api = {
     request("/api/auth/register", { method: "POST", body: JSON.stringify({ email, password }) }),
   login: (email, password) =>
     request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) }),
+  loginWithGoogle: (credential) =>
+    request("/api/auth/google", { method: "POST", body: JSON.stringify({ credential }) }),
   me: () => request("/api/auth/me"),
   usage: () => request("/api/usage"),
   createSubscription: () => request("/api/billing/checkout", { method: "POST" }),

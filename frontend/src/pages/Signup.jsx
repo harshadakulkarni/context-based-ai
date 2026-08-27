@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import ThemeToggle from "../components/ThemeToggle.jsx";
+import GoogleSignInButton, { googleSignInConfigured } from "../components/GoogleSignInButton.jsx";
 
 export default function Signup() {
-  const { register } = useAuth();
+  const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,6 +47,19 @@ export default function Signup() {
     }
   }
 
+  async function handleGoogleCredential(credential) {
+    setError("");
+    setSubmitting(true);
+    try {
+      await loginWithGoogle(credential);
+      setSuccess(true);
+      setTimeout(() => navigate("/dashboard"), 700);
+    } catch (err) {
+      setError(err.message || "Could not sign up with Google. Please try again.");
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div>
       <nav className="nav">
@@ -69,6 +83,17 @@ export default function Signup() {
             <div className="auth-hint">
               Waking up the server — this can take up to a minute on the first request in a while.
             </div>
+          )}
+
+          {googleSignInConfigured() && (
+            <>
+              <div className="auth-google">
+                <GoogleSignInButton onCredential={handleGoogleCredential} onError={setError} />
+              </div>
+              <div className="auth-divider">
+                <span>or</span>
+              </div>
+            </>
           )}
 
           <label htmlFor="email">Email</label>

@@ -15,7 +15,7 @@ async function getLanguage() {
   return data.language || "English";
 }
 
-async function fetchDefinition(word, context, pageTitle, pageUrl) {
+async function fetchDefinition(word, context, pageTitle, pageUrl, detailed) {
   const token = await getToken();
 
   if (!token) {
@@ -31,7 +31,7 @@ async function fetchDefinition(word, context, pageTitle, pageUrl) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ word, context, pageTitle, pageUrl, language })
+      body: JSON.stringify({ word, context, pageTitle, pageUrl, language, detailed: !!detailed })
     });
 
     if (response.status === 401) {
@@ -86,7 +86,9 @@ async function saveFavorite(word, context, definition, pageTitle, pageUrl) {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message && message.type === "DEFINE_WORD") {
-    fetchDefinition(message.word, message.context, message.pageTitle, message.pageUrl).then(sendResponse);
+    fetchDefinition(message.word, message.context, message.pageTitle, message.pageUrl, message.detailed).then(
+      sendResponse
+    );
     return true; // keep the message channel open for async sendResponse
   }
 

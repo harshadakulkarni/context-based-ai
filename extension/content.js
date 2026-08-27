@@ -198,7 +198,50 @@
     panel.querySelector("#ctxdef-word-title").textContent = word;
     lastResult = { word, context, definition: text, pageTitle, pageUrl };
     setSaveButtonState("default");
-    body.innerHTML = `<div class="ctxdef-definition">${escapeHtml(text).replace(/\n/g, "<br>")}</div>`;
+    body.innerHTML = `
+      <div class="ctxdef-definition">${escapeHtml(text).replace(/\n/g, "<br>")}</div>
+      <button class="ctxdef-detail-btn" id="ctxdef-more-detail">More detail</button>
+      <div id="ctxdef-detail-body"></div>
+    `;
+    body.querySelector("#ctxdef-more-detail").addEventListener("click", requestMoreDetail);
+  }
+
+  function requestMoreDetail() {
+    if (!lastRequest || !lastResult) return;
+    const btn = panel.querySelector("#ctxdef-more-detail");
+    const detailBody = panel.querySelector("#ctxdef-detail-body");
+    if (!btn || !detailBody) return;
+
+    btn.disabled = true;
+    btn.textContent = "Loading more detail…";
+    detailBody.innerHTML = "";
+
+    chrome.runtime.sendMessage(
+      {
+        type: "DEFINE_WORD",
+        word: lastRequest.word,
+        context: lastRequest.context,
+        pageTitle: lastResult.pageTitle,
+        pageUrl: lastResult.pageUrl,
+        detailed: true
+      },
+      (response) => {
+        if (chrome.runtime.lastError || !response || !response.ok) {
+          const message =
+            (response && response.error === "limit_exceeded" && (response.message || "Free limit reached.")) ||
+            (response && response.message) ||
+            "Could not load more detail.";
+          detailBody.innerHTML = `<div class="ctxdef-error">${escapeHtml(message)}</div>`;
+          btn.disabled = false;
+          btn.textContent = "More detail";
+          return;
+        }
+        detailBody.innerHTML = `<div class="ctxdef-definition ctxdef-detail-text">${escapeHtml(
+          response.definition
+        ).replace(/\n/g, "<br>")}</div>`;
+        btn.remove();
+      }
+    );
   }
 
   function setBodyError(message, actionLabel) {

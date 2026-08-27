@@ -30,6 +30,12 @@ public class GlobalExceptionHandler {
                 .body(Map.of("ok", false, "error", "billing_error", "message", ex.getMessage()));
     }
 
+    @ExceptionHandler(ServiceMisconfiguredException.class)
+    public ResponseEntity<Map<String, Object>> handleServiceMisconfigured(ServiceMisconfiguredException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(Map.of("ok", false, "error", "server_misconfigured", "message", ex.getMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleBadRequest(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
